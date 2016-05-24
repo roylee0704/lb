@@ -18,13 +18,9 @@ func TestRequester(t *testing.T) {
 	}
 
 	go Requester(work)
-	<-sleep
-
-	req := <-work
-	result := req.fn()
-
-	req.c <- result
-
-	<-done
-
+	<-sleep            // to release from sleep
+	req := <-work      // to obtain request sent by requester
+	result := req.fn() // to processs job in request
+	req.c <- result    // and report job result back to requester
+	<-done             // wait until result is printed.
 }
